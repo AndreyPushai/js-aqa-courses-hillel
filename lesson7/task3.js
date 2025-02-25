@@ -1,7 +1,7 @@
 
 function divide(numerator, denominator) {
     if (denominator === 0) throw new Error("Division by zero.");
-    if (isNaN(numerator) || isNaN(denominator)) 
+    if (typeof numerator !== 'number' || typeof denominator !== 'number') 
         throw new Error("Provided value is not a number");
     return numerator / denominator;
 }
