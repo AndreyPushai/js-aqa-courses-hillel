@@ -1,4 +1,3 @@
-
 function isAdult(age) {
     if (age >= 18) return true;
     return false;
@@ -6,4 +5,3 @@ function isAdult(age) {
 
 console.log("Person is adult:", isAdult(25));
 console.log("Person is adult:", isAdult(15));
-

@@ -1,6 +1,5 @@
-import { Book } from './Book.js';
-import { EBook } from './EBook.js';
-
+import { Book } from "./Book.js";
+import { EBook } from "./EBook.js";
 
 const book1 = new Book("1984", "George Orwell", 1949);
 const book2 = new Book("Brave New World", "Aldous Huxley", 1932);
@@ -20,7 +19,7 @@ book1.printInfo();
 eBook1.fileFormat = "printed";
 eBook1.printInfo();
 
-let oldestBook = Book.getOldest(([book1, book2, book3, eBook1]));
+let oldestBook = Book.getOldest([book1, book2, book3, eBook1]);
 oldestBook.printInfo();
 
 let updatedBook = EBook.fromBook(book2, "PDF");
@@ -28,4 +27,3 @@ updatedBook.printInfo();
 
 let bookWithoutFormat = EBook.fromBook(book3);
 bookWithoutFormat.printInfo();
-

@@ -1,4 +1,3 @@
-
 const url = "https://jsonplaceholder.typicode.com";
 
 class FetchHandler {
@@ -7,7 +6,7 @@ class FetchHandler {
     }
 
     async #fetchCall(path, method = "GET") {
-        return await fetch(`${this.url}${path}`, {method});
+        return await fetch(`${this.url}${path}`, { method });
     }
 
     async fetchUser(userNumber) {
@@ -18,7 +17,6 @@ class FetchHandler {
         } catch (error) {
             console.log(error);
         }
-
     }
     async fetchTodo(toDoNumber) {
         try {
@@ -35,7 +33,6 @@ const fetchHandler = new FetchHandler(url);
 const asyncCaller = async () => {
     console.log(await fetchHandler.fetchTodo(1));
     console.log(await fetchHandler.fetchUser(1));
-}
+};
 
 asyncCaller();
-
