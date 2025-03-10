@@ -6,4 +6,3 @@ console.log(
     chalk.greenBright("javascript! "),
     chalk.yellowBright(":)")
 );
-

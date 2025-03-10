@@ -1,4 +1,3 @@
-
 function recursiveFunc(num) {
     console.log(num);
 

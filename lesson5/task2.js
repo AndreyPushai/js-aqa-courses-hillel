@@ -1,4 +1,3 @@
-
 let averageGrade = 100;
 
 switch (true) {
@@ -17,4 +16,3 @@ switch (true) {
     default:
         console.log("Незадовільно");
 }
-

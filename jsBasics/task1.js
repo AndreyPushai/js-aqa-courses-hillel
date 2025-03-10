@@ -1,4 +1,3 @@
-
 let myString = "string";
 let myNumber = 123;
 let myBool = true;
@@ -10,4 +9,3 @@ console.log(myNumber);
 console.log(myBool);
 console.log(myNull);
 console.log(myUndefined);
-
