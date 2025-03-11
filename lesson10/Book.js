@@ -1,4 +1,3 @@
-
 export class Book {
     constructor(title, author, year) {
         this._title = title;
@@ -15,7 +14,8 @@ export class Book {
     }
 
     set title(title) {
-        if (typeof title !== "string") throw new Error("Title should be string");
+        if (typeof title !== "string")
+            throw new Error("Title should be string");
         this._title = title;
     }
 
@@ -24,7 +24,8 @@ export class Book {
     }
 
     set author(author) {
-        if (typeof author !== "string") throw new Error("Author should be string");
+        if (typeof author !== "string")
+            throw new Error("Author should be string");
         this._author = author;
     }
 
@@ -38,7 +39,7 @@ export class Book {
     }
 
     static getOldest(books) {
-        return books.reduce((oldest, current) => 
+        return books.reduce((oldest, current) =>
             current.year < oldest.year ? current : oldest
         );
     }

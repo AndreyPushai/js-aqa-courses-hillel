@@ -1,20 +1,17 @@
-
 const url = "https://jsonplaceholder.typicode.com";
 const todosPath = "/todos/1";
 const usersPath = "/users/1";
 
-
 async function getFirstTodo() {
-    const response = await fetch(url + todosPath, {method: "get"});
+    const response = await fetch(url + todosPath, { method: "get" });
     const json = await response.json();
-    return json
+    return json;
 }
 
-
 async function getFirstUser() {
-    const response = await fetch(url + usersPath, {method: "get"});
+    const response = await fetch(url + usersPath, { method: "get" });
     const json = await response.json();
-    return json
+    return json;
 }
 
 try {

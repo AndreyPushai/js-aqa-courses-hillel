@@ -1,4 +1,3 @@
-
 let users = [
     {
         name: "Bob",
@@ -20,4 +19,3 @@ let users = [
 for (const { name, email, age } of users) {
     console.log(`Name: ${name}, Email: ${email}, Age: ${age}`);
 }
-

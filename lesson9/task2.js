@@ -1,4 +1,3 @@
-
 let book = {
     title: "Brave New World",
     author: "Aldous Huxley",
@@ -8,4 +7,3 @@ let book = {
 const { title, author } = book;
 
 console.log(title, author);
-
