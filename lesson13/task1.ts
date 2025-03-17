@@ -1,9 +1,9 @@
 import axios, {AxiosResponse, AxiosInstance} from "axios";
 
 interface ResponseObject {
-    id: string,
-    name: string,
-    data: object,
+    id: string;
+    name: string;
+    data: object;
 };
 
 const axiosInstance: AxiosInstance = axios.create({
@@ -20,7 +20,13 @@ async function getObjectById(id: string): Promise<ResponseObject> {
     return response.data;
 };
 
-async function postAddObject(data: object): Promise<ResponseObject> {
+interface PayloadObject {
+    name: string;
+    data: object | string;
+
+};
+
+async function postAddObject(data: PayloadObject): Promise<ResponseObject> {
     const response: AxiosResponse = await axiosInstance.post(``, data);
     return response.data;
 };
@@ -47,8 +53,8 @@ console.log(allObjects);
 
 // Create new object
 const addedObject = await postAddObject({
-    "name": "Google Pixel 9",
-    "data": {
+    name: "Google Pixel 9",
+    data: {
        "year": 2024,
        "price": 749.99,
        "color": "Obsidian",
