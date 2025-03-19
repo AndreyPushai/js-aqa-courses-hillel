@@ -33,7 +33,7 @@ class AxiosHandler {
             },
         })
     };
-    async postAddObject(data: PayloadObject): Promise<AxiosResponse> {
+    async postAddObject(data: PayloadObject | null): Promise<AxiosResponse> {
         return this.axiosInstance.post(``, data);
     };
 
@@ -156,5 +156,60 @@ describe("Create, read, update, delete object", () => {
         const response = await axiosHandler.deleteObject(createdObjectID);
         expect(response.status).toBe(200);
         expect(response.data.message).toBe(`Object with id = ${createdObjectID} has been deleted.`);
+    });
+});
+
+describe("Negative checks", () => {
+
+    const axiosHandler = new AxiosHandler();
+
+    test("GET: Test invalid /items path", async () => {
+        const axiosHandler = new AxiosHandler("https://api.restful-api.dev/items");
+        const response = await axiosHandler.getAllObjects();
+        
+        expect(response.status).toBe(404);
+        expect(response.data.error).toBe("Not Found");
+        expect(response.data.timestamp).toBeDefined();
+        expect(response.data.path).toBe("/items");
+    });
+
+    test("GET: Test invalid objects ids return an empty array", async () => {
+        const response = await axiosHandler.getObjectsByIds("test", "asdf", "copy");
+
+        expect(response.status).toBe(200);
+        expect(response.data).toEqual([]);
+    });
+
+    test("GET: Test invalid object id", async () => {
+        const id = "test";
+        const response = await axiosHandler.getObjectById(id);
+        expect(response.status).toBe(404);
+        // They have a typo in text Oject LOL.
+        expect(response.data.error).toBe(`Oject with id=${id} was not found.`);
+    });
+
+    test("POST: Test system doesn't accept null data", async () => {
+        const response = await axiosHandler.postAddObject(null);
+        expect(response.status).toBe(415);
+        expect(response.data.error).toContain("415 Unsupported Media Type");
+    });
+
+    test("PUT: Test update reserved object", async () => {
+        const response = await axiosHandler.putUpdateObject("1", {});
+        expect(response.status).toBe(405);
+        expect(response.data.error).toContain("1 is a reserved id");
+    });
+
+    test("PATCH: Test update reserved object", async () => {
+        const response = await axiosHandler.patchUpdateObject("1", {});
+        expect(response.status).toBe(405);
+        expect(response.data.error).toContain("1 is a reserved id");
+    });
+    
+    test("DELETE: Test delete object with invalid id", async () => {
+        const id = "test";
+        const response = await axiosHandler.deleteObject(id);
+        expect(response.status).toBe(404);
+        expect(response.data.error).toBe(`Object with id = ${id} doesn't exist.`);
     });
 });
