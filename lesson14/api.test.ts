@@ -6,46 +6,55 @@ interface PayloadObject {
     data: object | string;
 };
 
-const axiosInstance: AxiosInstance = axios.create({
-    baseURL: "https://api.restful-api.dev/objects",
-});
+class AxiosHandler {
+    protected baseURL: string;
+    protected axiosInstance: AxiosInstance;
 
-async function getAllObjects(): Promise<AxiosResponse> {
-    return axiosInstance.get("");
-};
+    constructor(baseURL="https://api.restful-api.dev/objects") {
+        this.baseURL = baseURL;
+        this.axiosInstance = axios.create({
+            baseURL: baseURL,
+            validateStatus: function () { return true; }});
+    }
 
-async function getObjectById(id: string): Promise<AxiosResponse> {
-    return axiosInstance.get(`${id}`)
-};
+    async getAllObjects(): Promise<AxiosResponse> {
+        return this.axiosInstance.get("");
+    };
 
-async function getObjectsByIds(...ids: string[]): Promise<AxiosResponse> {
-    return axiosInstance.get("", {
-        params: {id: ids},
-        paramsSerializer: function (params) {
-            return qs.stringify(params, {arrayFormat: 'repeat'})
-        },
-    })
-};
+    async getObjectById(id: string): Promise<AxiosResponse> {
+        return this.axiosInstance.get(`${id}`)
+    };
 
-async function postAddObject(data: PayloadObject): Promise<AxiosResponse> {
-    return axiosInstance.post(``, data);
-};
+    async getObjectsByIds(...ids: string[]): Promise<AxiosResponse> {
+        return this.axiosInstance.get("", {
+            params: {id: ids},
+            paramsSerializer: function (params) {
+                return qs.stringify(params, {arrayFormat: 'repeat'})
+            },
+        })
+    };
+    async postAddObject(data: PayloadObject): Promise<AxiosResponse> {
+        return this.axiosInstance.post(``, data);
+    };
 
-async function putUpdateObject(id: string, data: object): Promise<AxiosResponse> {
-    return axiosInstance.put(`/${id}`, data);
-};
+    async putUpdateObject(id: string, data: object): Promise<AxiosResponse> {
+        return this.axiosInstance.put(`/${id}`, data);
+    };
 
-async function patchUpdateObject(id: string, data: object): Promise<AxiosResponse> {
-    return axiosInstance.patch(`/${id}`, data);
-};
+    async patchUpdateObject(id: string, data: object): Promise<AxiosResponse> {
+        return this.axiosInstance.patch(`/${id}`, data);
+    };
 
-async function deleteObject(id: string): Promise<AxiosResponse> {
-    return axiosInstance.delete(`/${id}`);
+    async deleteObject(id: string): Promise<AxiosResponse> {
+        return this.axiosInstance.delete(`/${id}`);
+    };
 };
 
 describe("Get objects tests", () => {
+    const axiosHandler = new AxiosHandler();
+
     test("GET: Verify all objects returned", async () => {
-        const response = await getAllObjects();
+        const response = await axiosHandler.getAllObjects();
         expect(response.status).toBe(200);
         expect(response.data).toBeDefined();
     });
@@ -69,13 +78,15 @@ describe("Get objects tests", () => {
                 data: { "Capacity": "64 GB", "Screen size": 7.9 }
             }
         ];
-        const response = await getObjectsByIds("3", "5", "10");
+        const response = await axiosHandler.getObjectsByIds("3", "5", "10");
         expect(response.status).toBe(200);
         expect(response.data).toEqual(expect.arrayContaining(expectedObjects));
     });
 });
 
 describe("Create, read, update, delete object", () => {
+
+    const axiosHandler = new AxiosHandler();
 
     const payload1: PayloadObject = {
         name: "Google Pixel 9",
@@ -102,12 +113,12 @@ describe("Create, read, update, delete object", () => {
         "data": "test",
     };
 
-    let createdObjectResponse: any;
+    let createdObjectResponse: AxiosResponse;
     let createdObjectID: string;
 
     beforeAll(async () => {
 
-        createdObjectResponse = await postAddObject(payload1);
+        createdObjectResponse = await axiosHandler.postAddObject(payload1);
         createdObjectID = createdObjectResponse.data.id;
     });
 
@@ -119,14 +130,14 @@ describe("Create, read, update, delete object", () => {
     });
 
     test("GET: Verify user can get created object by ID", async () => {
-        const response = await getObjectById(createdObjectID);
+        const response = await axiosHandler.getObjectById(createdObjectID);
         expect(response.status).toBe(200);
         expect(response.data.id).toBe(createdObjectID);
         expect(response.data).toMatchObject(payload1);
     });
 
     test("PUT: Verify user can update created object", async () => {
-        const response = await putUpdateObject(createdObjectID, payload2);
+        const response = await axiosHandler.putUpdateObject(createdObjectID, payload2);
         expect(response.status).toBe(200);
         expect(response.data.id).toBe(createdObjectID);
         expect(response.data.updatedAt).toBeDefined();
@@ -134,7 +145,7 @@ describe("Create, read, update, delete object", () => {
     });
 
     test("PATCH: Verify user can patch object", async () => {
-        const response = await patchUpdateObject(createdObjectID, payload3);
+        const response = await axiosHandler.patchUpdateObject(createdObjectID, payload3);
         expect(response.status).toBe(200);
         expect(response.data.id).toBe(createdObjectID);
         expect(response.data.updatedAt).toBeDefined();
@@ -142,7 +153,7 @@ describe("Create, read, update, delete object", () => {
     });
 
     test("DELETE: Verify user can delete created object", async () => {
-        const response = await deleteObject(createdObjectID);
+        const response = await axiosHandler.deleteObject(createdObjectID);
         expect(response.status).toBe(200);
         expect(response.data.message).toBe(`Object with id = ${createdObjectID} has been deleted.`);
     });
