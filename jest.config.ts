@@ -4,9 +4,7 @@
  */
 
 import type {Config} from 'jest';
-import jestConfig from "eslint-plugin-jest";
 
-jestConfig.configs["flat/recommended"];
 
 const config: Config = {
   // All imported modules in your tests should be mocked automatically
